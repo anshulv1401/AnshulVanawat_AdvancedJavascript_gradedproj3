@@ -3,6 +3,12 @@ Done ii) You may use the Css as per your choice but the given functionalities sh
 Done iii) It should follow proper naming convention
 Done iv) Functionalities should be achieved with specific methods
 
+Done : WordPerMinute(WPM) (count of the words typed by user)
+Done : CharacterPerMinute(count of the characters typed by the user)
+Done : Errors(Wrong characters typed by the user)
+Done : time elapsed (it will be 0 at this phase of game) 
+Done : Accuracy(Correct characters typed / total count of characters in the dummy text *100)
+
 1)
 ---Formatting and Indentation---
 Done : The code is formatted correctly; it uses logical spacing and indentations (2.5 Marks)
@@ -10,7 +16,7 @@ Done : The code is formatted correctly; it uses logical spacing and indentations
 
 2)
 ---Package Structures and Class Structures---
-Web Page behavior when the browser changes its dimensions (2.5 Marks) 
+Done : Web Page behavior when the browser changes its dimensions (2.5 Marks) 
 Done : Proper file name and title of the file (2.5 Marks)
 5
 

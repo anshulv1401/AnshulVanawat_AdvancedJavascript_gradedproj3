@@ -3,7 +3,7 @@ let randomTextArray = [
     "Positive anything is better than negative nothing.",
     "Miracles happen to those who believe in them.",
     "One small positive thought can change your whole day.",
-    "The best and most beautiful things in the world cannot be seen or even touched — they must be felt with the heart",
+    "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart",
     "Whoever is happy will make others happy too",
     "Until the lions have their own historians, the history of the hunt will always glorify the hunter.",
     "The secrets of evolution, are time and death.",
