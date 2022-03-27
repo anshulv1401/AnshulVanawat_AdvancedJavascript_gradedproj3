@@ -2,6 +2,7 @@
 body {
   padding: 20px;
   font-family: Arial, sans-serif;
+  background-color: beige;
 }
 
 h1 {
@@ -16,6 +17,7 @@ h1 {
   height: fit-content;
   border-radius: 4px;
   width: 700px;
+  background-color: cornsilk;
 }
 
 /* Score Board */
@@ -53,7 +55,9 @@ h1 {
 /*Input Outputs*/
 
 .typingDisplay {
-  height: 35px;
+  height: Auto;
+  font-size: 1.5em;
+  text-align: center;
   padding: 10px;
   border-color: transparent;
   background-color: #137ea7;
@@ -65,11 +69,13 @@ h1 {
 
 .typingInput {
   border-color: transparent;
-  height: 35px;
+  height: 55px;
   padding-left: 10px;
   border-radius: 4px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1.5px 5px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
+  font-size: 1.5em;
+  background-color: white;
 }
 
 .typingInputDisabled {
@@ -101,4 +107,15 @@ button:hover {
 
 button:active {
   box-shadow: none;
+}
+
+/*Text Style*/
+
+.correctText {
+  color: greenyellow;
+}
+
+.incorrectText {
+  color: red;
+  text-decoration: underline;
 }

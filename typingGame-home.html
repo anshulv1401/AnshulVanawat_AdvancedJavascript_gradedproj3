@@ -42,7 +42,7 @@
             </div>
             <div class = "typingDisplay" >Click on the area below to start the game.</div>
             
-            <input type="text" placeholder="start typing here..." class="typingInput" onclick="startGame()">
+            <input type="text" placeholder="start typing here..." class="typingInput" onfocus="startGame()" oninput="spellCheck()">
             <button id="restart" class="hidden" onclick="restart()">Restart</button>              
         </div>
     </div>

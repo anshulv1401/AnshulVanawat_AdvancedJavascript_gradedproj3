@@ -1,15 +1,57 @@
+/*Random text*/
+let randomTextArray = [
+    "Positive anything is better than negative nothing.",
+    "Miracles happen to those who believe in them.",
+    "One small positive thought can change your whole day.",
+    "The best and most beautiful things in the world cannot be seen or even touched — they must be felt with the heart",
+    "Whoever is happy will make others happy too",
+    "Until the lions have their own historians, the history of the hunt will always glorify the hunter.",
+    "The secrets of evolution, are time and death.",
+    "There's an unbroken thread that stretches from those first cells to us.",
+    "It is the winners who write history - their way."
+];
+
+/* Elements */
+
+var WPMValue = document.querySelector("#WPM .scoreValue");
+var CPMValue = document.querySelector("#CPM .scoreValue");
+var ErrorsValue = document.querySelector("#Errors .scoreValue");
+var TimeValue = document.querySelector("#Time .scoreValue");
+var AccuracyValue = document.querySelector("#Accuracy .scoreValue");
+
+
+var TypingDisplay = document.getElementsByClassName("typingDisplay")[0];
+var TypingInput = document.getElementsByClassName("typingInput")[0];
+
+/* Global Variables */
+
+/* Game Status */
+var running = "Running";
+var notRunning = "NotRunning"
+var gameStatus = notRunning;
+var TimeLimit = 60;
+var totalErrors = 0;
+var totalCharTyped = 0;
+var totalWordTyped = 0;
+
+var currentStatementCharTyped = 0;
+var currentStatementWordTyped = 0;
+let currentTextIndex = 0;
+
+
+/* Event Functions*/
+
 function restart() {
 
-    //Value Reset
-    var WPMValue = document.querySelector("#WPM .scoreValue");
-    var CPMValue = document.querySelector("#CPM .scoreValue");
-    var ErrorsValue = document.querySelector("#Errors .scoreValue");
-    var TimeValue = document.querySelector("#Time .scoreValue");
-    var AccuracyValue = document.querySelector("#Accuracy .scoreValue");
+    totalErrors = 0;
+    totalCharTyped = 0;
+    totalWordTyped = 0;
+    currentStatementWordTyped = 0;
+    currentStatementCharTyped = 0;
 
-    WPMValue.innerHTML = 0;
-    CPMValue.innerHTML = 0;
-    ErrorsValue.innerHTML = 0;
+    WPMValue.innerHTML = totalWordTyped;
+    CPMValue.innerHTML = totalCharTyped;
+    ErrorsValue.innerHTML = totalErrors;
     TimeValue.innerHTML = "60s";
     AccuracyValue.innerHTML = 100;
     
@@ -21,32 +63,83 @@ function restart() {
     CPM.classList.add('hidden');
     restart.classList.add('hidden');
 
-    var display = document.getElementsByClassName("typingDisplay")[0];
-    var input = document.getElementsByClassName("typingInput")[0];
-
-    display.innerHTML = "Click on the area below to start the game.";
-    input.value = "";
-    input.disabled = false;
+    TypingDisplay.innerHTML = "Click on the area below to start the game.";
+    TypingInput.value = "";
+    TypingInput.disabled = false;
+    
+    gameStatus = notRunning;
 }
 
 function startGame() {
-    var display = document.getElementsByClassName("typingDisplay")[0];
-    display.innerHTML = "The Journey of a thousand miles begins with one step."
-    
-    var input = document.getElementsByClassName("typingInput")[0];
-    
-    input.addEventListener("keyup", function(event) {
-        if (event.key === ' ') {
-            event.preventDefault();
-            spellCheck();
-        }
-    });
-    
+    if(gameStatus !== notRunning){
+        return;
+    }
+
     startTimer();
+    showNewText();
+
+    gameStatus = running;
 }
 
+function spellCheck() {
+    var errors = 0;
+
+    const expectTextArray = TypingDisplay.querySelectorAll('span')
+    const actualTextArray = TypingInput.value.split('')
+
+    currentStatementWordTyped = 0;
+    currentStatementCharTyped = 0;
+    expectTextArray.forEach((charSpan, index) => {
+        const character = actualTextArray[index]
+        if (character == null) {
+            charSpan.classList.remove('correctText')
+            charSpan.classList.remove('incorrectText')
+        } 
+        else {
+            currentStatementCharTyped++;
+            if (character === charSpan.innerText) {
+                charSpan.classList.add('correctText')
+                charSpan.classList.remove('incorrectText')
+            } else {    
+                charSpan.classList.remove('correctText')
+                charSpan.classList.add('incorrectText')
+                errors++;
+            }
+
+            //space encountered means word completed.
+            if (charSpan.innerText == ' '){
+                currentStatementWordTyped++;
+            }
+        }
+    })
+
+    //Update Errors
+    ErrorsValue.innerHTML = totalErrors + errors;
+
+    //Update accuracy
+    var tatalChar = (totalCharTyped + currentStatementCharTyped)
+
+    let correctChars = (tatalChar - (totalErrors + errors));
+    let accuracy = ((correctChars / tatalChar) * 100);
+
+    AccuracyValue.innerHTML = Math.round(accuracy);
+
+    if (expectTextArray.length == actualTextArray.length) {
+
+        //including the last word of the statement, as there will be no space in the end.
+        totalWordTyped += currentStatementWordTyped + 1;
+
+        totalCharTyped += currentStatementCharTyped;
+        showNewText();
+        totalErrors += errors;
+        TypingInput.value = "";
+    }
+}
+
+/* Internal functions */
+
 function startTimer(){
-    var countDown = 5;
+    var countDown = TimeLimit;
     
     var timePassed = 0;
     
@@ -54,8 +147,7 @@ function startTimer(){
         timePassed++;
         var timeLeft = countDown - timePassed;
 
-        var timeValue = document.querySelector("#Time .scoreValue");
-        timeValue.innerHTML = timeLeft + "s";
+        TimeValue.innerHTML = timeLeft + "s";
         
         if (timeLeft === 0){
             clearInterval(x);
@@ -65,6 +157,11 @@ function startTimer(){
 }
 
 function stopGame() {
+    
+    if(gameStatus !== running){
+        return;
+    }
+
     var WPM = document.getElementById("WPM");
     var CPM = document.getElementById("CPM");
     var restart = document.getElementById("restart");
@@ -73,26 +170,37 @@ function stopGame() {
     CPM.classList.remove('hidden');
     restart.classList.remove('hidden');
 
-    var WPMValue = document.querySelector("#WPM .scoreValue");
-    var CPMValue = document.querySelector("#CPM .scoreValue");
-    var ErrorsValue = document.querySelector("#Errors .scoreValue");
-    var TimeValue = document.querySelector("#Time .scoreValue");
-    var AccuracyValue = document.querySelector("#Accuracy .scoreValue");
+    const expectTextArray = TypingDisplay.querySelectorAll('span')
+    const actualTextArray = TypingInput.value.split('')
 
-    WPMValue.innerHTML = 8;
-    CPMValue.innerHTML = 41;
-    ErrorsValue.innerHTML = 3;
-    TimeValue.innerHTML = "0s";
-    AccuracyValue.innerHTML = 93;
+    var lastChar = expectTextArray[actualTextArray.length];
 
-    var input = document.getElementsByClassName("typingInput")[0];
-    input.disabled = true;
+    if(lastChar.innerHTML == ' '){
+        currentStatementWordTyped++;
+    }
+
+    WPMValue.innerHTML = totalWordTyped + currentStatementWordTyped;
+    CPMValue.innerHTML = totalCharTyped + currentStatementCharTyped;
+
+    TypingInput.disabled = true;
+
+    gameStatus = notRunning;
 }
 
+async function showNewText() {
+    var textToType = randomTextArray[currentTextIndex];
 
-function spellCheck() {
-    var displayText = document.getElementsByClassName("typingInput")[0].innerHTML();
-    var inputValue = document.getElementsByClassName("typingDisplay")[0].value;
-
+    TypingDisplay.innerHTML = ''
+    textToType.split('').forEach(char => {
+        const charElement = document.createElement('span')
+        charElement.innerText = char
+        TypingDisplay.appendChild(charElement)
+    })
     
+    if (currentTextIndex < randomTextArray.length - 1)
+        currentTextIndex++;
+    else
+        currentTextIndex = 0;
+    
+    TypingInput.value = null
 }
